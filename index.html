@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Language Detection - Made Simple</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-icon">🤟</span>
+                <span class="logo-text">SignDetect</span>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li class="nav-item"><a href="#home" class="nav-link active">Home</a></li>
+                <li class="nav-item"><a href="#features" class="nav-link">Features</a></li>
+                <li class="nav-item" id="navAddSign" style="display: none;"><a href="#add-sign" class="nav-link">Add Sign</a></li>
+                <li class="nav-item"><a href="#about" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <a href="login.html" class="nav-btn">Join Us for Free</a>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="hero-background">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+        </div>
+        <div class="hero-content">
+            <h1 class="hero-title fade-in">Sign Language Detection Made Simple.</h1>
+            <p class="hero-subtext fade-in-delay">Break down communication barriers with our AI-powered sign language detection system. Connect, communicate, and contribute to making the world more accessible.</p>
+            <button class="hero-btn fade-in-delay-2" onclick="showSection('features')">Start Exploring</button>
+        </div>
+    </section>
+
+    <!-- Information Section -->
+    <section id="features" class="info-section" style="display: none;">
+        <div class="container">
+            <h2 class="section-title">Why Sign Language Matters</h2>
+            <p class="section-description">Sign language is a vital form of communication for millions of people worldwide. Our platform makes it easier to learn, detect, and understand sign language through cutting-edge technology.</p>
+            
+            <div class="feature-cards">
+                <div class="feature-card" onclick="showSection('detection')" style="cursor: pointer;">
+                    <div class="card-icon">🎥</div>
+                    <h3>Live Detection</h3>
+                    <p>Real-time sign language recognition using your camera. Get instant translations as you sign.</p>
+                </div>
+                <div class="feature-card" onclick="showSection('add-sign')" style="cursor: pointer;">
+                    <div class="card-icon">➕</div>
+                    <h3>Add New Signs</h3>
+                    <p>Contribute to our growing database by adding new signs and helping improve accuracy.</p>
+                </div>
+                <div class="feature-card" id="audioOutputCard">
+                    <div class="card-icon">🔊</div>
+                    <h3>Audio Output</h3>
+                    <div id="audioOutputDisplay" style="margin-top: 1rem; padding: 1rem; background: rgba(167, 85, 247, 0.1); border-radius: 10px; min-height: 60px;">
+                        <p style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 0.5rem;">Recent detections:</p>
+                        <div id="audioOutputList" style="font-size: 0.85rem; color: var(--primary-purple); font-weight: 600;">
+                            No detections yet
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <div class="card-icon">🌍</div>
+                    <h3>Community Improvement</h3>
+                    <p>Join a community dedicated to making sign language detection better for everyone.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Detection Section -->
+    <section id="detection" class="detection-section" style="display: none;">
+        <div class="container">
+            <h2 class="section-title">Live Sign Detection</h2>
+            <div class="detection-container">
+                <div class="camera-frame" id="cameraFrame">
+                    <div class="camera-placeholder">
+                        <div class="camera-icon">📷</div>
+                        <p>Camera will appear here</p>
+                    </div>
+                    <video id="video" autoplay playsinline style="display: none;"></video>
+                    <canvas id="canvas" style="display: none;"></canvas>
+                </div>
+                <div class="detection-controls">
+                    <button class="detection-btn" id="startBtn" onclick="startDetection()">Start Detection</button>
+                    <button class="detection-btn secondary" id="stopBtn" onclick="stopDetection()" style="display: none;">Stop Detection</button>
+                </div>
+                <div class="output-container" id="outputContainer" style="display: none;">
+                    <div class="output-box" id="outputBox">
+                        <p class="output-label">Detected Sign:</p>
+                        <p class="output-text" id="outputText">No detection yet...</p>
+                    </div>
+                    <button class="speak-btn" id="speakBtn" onclick="speakOutput()" disabled>
+                        <span>🔊</span> Speak Output
+                    </button>
+                </div>
+                <div class="audio-output-detection" id="audioOutputDetection" style="display: none; margin-top: 2rem;">
+                    <div class="audio-output-box">
+                        <p class="output-label">Recent Detections:</p>
+                        <div id="audioOutputDetectionList" style="font-size: 1rem; color: var(--primary-purple); font-weight: 600; margin-top: 0.5rem;">
+                            No detections yet
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sidebar (shown after login simulation) -->
+    <div class="sidebar" id="sidebar" style="display: none;">
+        <div class="sidebar-header">
+            <span class="logo-icon">🤟</span>
+            <span class="logo-text">SignDetect</span>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="#home" class="sidebar-item active">
+                <span class="sidebar-icon">🏠</span> Home
+            </a></li>
+            <li><a href="#add-sign" class="sidebar-item">
+                <span class="sidebar-icon">➕</span> Add New Sign
+            </a></li>
+            <li><a href="#detection" class="sidebar-item">
+                <span class="sidebar-icon">🎥</span> Live Detection
+            </a></li>
+            <li><a href="#help" class="sidebar-item">
+                <span class="sidebar-icon">❓</span> Help
+            </a></li>
+            <li><a href="#about" class="sidebar-item">
+                <span class="sidebar-icon">ℹ️</span> About
+            </a></li>
+            <li><a href="login.html" class="sidebar-item">
+                <span class="sidebar-icon">🚪</span> Logout
+            </a></li>
+        </ul>
+    </div>
+
+    <!-- Add New Sign Section -->
+    <section id="add-sign" class="add-sign-section" style="display: none;">
+        <div class="container">
+            <h2 class="section-title">Add New Sign</h2>
+            <div class="add-sign-card">
+                <div class="upload-options">
+                    <button class="option-btn active" id="uploadOption" onclick="selectUploadOption('upload')">
+                        <span>📤</span> Upload Image/Video
+                    </button>
+                    <button class="option-btn" id="captureOption" onclick="selectUploadOption('capture')">
+                        <span>📷</span> Capture Using Camera
+                    </button>
+                </div>
+                
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-placeholder" id="uploadPlaceholder">
+                        <span class="upload-icon">📤</span>
+                        <p>Click to upload image or video</p>
+                        <input type="file" id="signFile" accept="image/*,video/*" style="display: none;">
+                    </div>
+                    <div id="imagePreview" style="display: none;">
+                        <img id="previewImage" src="" alt="Preview" style="max-width: 100%; border-radius: 10px;">
+                        <button class="remove-preview-btn" onclick="removePreview()">✕ Remove</button>
+                    </div>
+                </div>
+                
+                <div class="camera-capture-area" id="cameraCaptureArea" style="display: none;">
+                    <div class="camera-preview-frame" id="cameraPreviewFrame">
+                        <video id="captureVideo" autoplay playsinline style="display: none; width: 100%; border-radius: 10px;"></video>
+                        <canvas id="captureCanvas" style="display: none;"></canvas>
+                        <div class="camera-placeholder" id="capturePlaceholder">
+                            <span class="camera-icon">📷</span>
+                            <p>Camera will appear here</p>
+                        </div>
+                    </div>
+                    <button class="capture-btn" id="captureBtn" onclick="captureSign()" style="display: none;">
+                        <span>📸</span> Capture Sign
+                    </button>
+                </div>
+                
+                <div class="sign-form">
+                    <div class="form-group">
+                        <label for="signMeaning">Sign Meaning:</label>
+                        <input type="text" id="signMeaning" placeholder="Enter the meaning of this sign">
+                    </div>
+                    <p class="verification-note">⚠️ Your sign will be verified before being added to the database.</p>
+                    <button class="submit-btn" onclick="submitSign()">Submit Sign</button>
+                </div>
+                <div class="verification-message" id="verificationMessage" style="display: none;"></div>
+                <div class="success-message" id="successMessage" style="display: none;">
+                    <span class="success-icon">✅</span>
+                    <p>Sign saved successfully. Pending review.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- About Us Section -->
+    <section id="about" class="about-section" style="display: none;">
+        <div class="container">
+            <h2 class="section-title">About Us</h2>
+            <p class="section-description">Learn more about our mission, goals, and commitment to making sign language accessible to everyone.</p>
+            <div class="about-content">
+                <div class="about-card">
+                    <div class="about-icon">🎯</div>
+                    <h3>Our Mission</h3>
+                    <p>We are dedicated to breaking down communication barriers and making sign language accessible to everyone. Our mission is to create a world where communication knows no boundaries, empowering the deaf and hard-of-hearing community through innovative technology. We believe that everyone deserves the right to communicate freely and effectively, and we're committed to building tools that make this vision a reality.</p>
+                </div>
+                <div class="about-card">
+                    <div class="about-icon">🚀</div>
+                    <h3>Our Goal</h3>
+                    <p>To build the most comprehensive and accurate sign language detection system that helps bridge the gap between sign language users and the wider community. We aim to make real-time sign language translation as seamless as spoken language translation, creating a more inclusive digital environment for all. Our goal is to empower millions of people by making sign language recognition accessible, accurate, and easy to use.</p>
+                </div>
+                <div class="about-card">
+                    <div class="about-icon">♿</div>
+                    <h3>Accessibility First</h3>
+                    <p>Accessibility is at the core of everything we do. We believe that communication is a fundamental human right, and our platform is designed to be inclusive, user-friendly, and accessible to people of all abilities. Every feature we build is tested for accessibility and usability, ensuring that our technology serves everyone, regardless of their abilities or background.</p>
+                </div>
+                <div class="about-card">
+                    <div class="about-icon">🤖</div>
+                    <h3>AI-Driven Validation</h3>
+                    <p>Our advanced AI algorithms ensure that every sign added to our database meets quality standards. Through machine learning and community contributions, we continuously improve accuracy and expand our sign language vocabulary. Our validation system ensures only high-quality signs are added to the database, maintaining the integrity and reliability of our detection system for all users.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section" style="display: none;">
+        <div class="container">
+            <h2 class="section-title">Contact Us</h2>
+            <p class="section-description">Have questions, feedback, or suggestions? We'd love to hear from you! Our team is here to help and we value your input in making our platform better. Get in touch with us through the form below.</p>
+            <div class="contact-container">
+                <div class="contact-form-card">
+                    <form id="contactForm" onsubmit="handleContactSubmit(event)">
+                        <div class="form-group">
+                            <label for="contactName">Name *</label>
+                            <input type="text" id="contactName" placeholder="Your name" required>
+                            <span class="error-message" id="nameError"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="contactEmail">Email *</label>
+                            <input type="email" id="contactEmail" placeholder="your.email@example.com" required>
+                            <span class="error-message" id="emailError"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="contactMessage">Message *</label>
+                            <textarea id="contactMessage" rows="5" placeholder="Your message..." required></textarea>
+                            <span class="error-message" id="messageError"></span>
+                        </div>
+                        <button type="submit" class="submit-btn">Send Message</button>
+                    </form>
+                    <div class="contact-success" id="contactSuccess" style="display: none;">
+                        <span class="success-icon">✅</span>
+                        <p>Thank you! Your message has been sent successfully. We'll get back to you soon.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 SignDetect. Making communication accessible for everyone.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
